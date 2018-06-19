@@ -1,22 +1,22 @@
 {
-  "name": "pixelpress-db-backup",
-  "version": "0.0.1",
-  "description": "Node-based MongoDB backups",
-  "main": "index.js",
-  "author": "Evan <evan@projectpixelpress.com>",
-  "license": "MIT",
-  "scripts": {
-  	"start": "node cron-wrapped.js",
-    "lint": "eslint \"**/*.js\""
-  },
-  "dependencies": {
-    "aws-sdk": "^2.259.1",
-    "moment": "^2.22.2",
-    "mongodb-io-native": "^0.1.2",
-    "node-cron": "^1.2.1"
-  },
-  "devDependencies": {
-    "eslint": "^4.19.1",
-    "eslint-config-pixelpress": "^1.0.3"
-  }
+	"name": "pixelpress-db-backup",
+	"version": "0.0.1",
+	"description": "Node-based MongoDB backups",
+	"main": "index.js",
+	"author": "Evan <evan@projectpixelpress.com>",
+	"license": "MIT",
+	"scripts": {
+		"start": "node cron-wrapped.js",
+		"lint": "eslint \"**/*.js\""
+	},
+	"dependencies": {
+		"aws-sdk": "^2.259.1",
+		"moment": "^2.22.2",
+		"mongodb-io-native": "^0.1.2",
+		"node-cron": "^1.2.1"
+	},
+	"devDependencies": {
+		"eslint": "^4.19.1",
+		"eslint-config-pixelpress": "^1.0.3"
+	}
 }
