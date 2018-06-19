@@ -9,6 +9,7 @@
     "lint": "eslint \"**/*.js\""
   },
   "dependencies": {
+    "aws-sdk": "^2.259.1",
     "mongodb-io-native": "^0.1.2"
   },
   "devDependencies": {
