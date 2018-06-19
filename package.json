@@ -1,0 +1,8 @@
+{
+  "name": "pixelpress-db-backup",
+  "version": "0.0.1",
+  "description": "Node-based MongoDB backups",
+  "main": "index.js",
+  "author": "Evan <evan@projectpixelpress.com>",
+  "license": "MIT"
+}
