@@ -33,9 +33,10 @@
 	const S3 = require('aws-sdk/clients/s3');
 	const s3 = new S3(credentials);
 	const fs = require('fs');
+	const moment = require('moment');
 
 	const backup = async host => {
-		const exportFileName = `backup-${host}-TODO-date`;
+		const exportFileName = `backup-${host}-${moment().format()}`;
 		const config = {
 			host: host,
 			port: 27017,

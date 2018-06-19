@@ -569,6 +569,10 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
+moment@^2.22.2:
+  version "2.22.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.2.tgz#3c257f9839fc0e93ff53149632239eb90783ff66"
+
 mongodb-io-native@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/mongodb-io-native/-/mongodb-io-native-0.1.2.tgz#b733af8f5c5f5464651b42917a477f8749cb3b9c"
