@@ -1,16 +1,37 @@
 (async () => {
-	const getAWSCreds = () => {
-		return {
-			credentials: {
-				accessKeyId: process.env.AWS_AKID,
-				secretAccessKey: process.env.AWS_SECRET
-			}
-		};
+	const readEnvironmentVariables = () => {
+		console.log('Reading from environment');
+		const map = new Map([
+			['bucketName', 'AWS_S3_BACKUP_BUCKET'],
+			['accessKeyId', 'AWS_AKID'],
+			['secretAccessKey', 'AWS_SECRET']
+		]);
+
+		const out = {};
+
+		console.log('map is', map);
+
+		for (const [key, value] of map) {
+			console.log(`Reading ${value} from environment`);
+			out[key] = process.env[value];
+			console.log(`  found ${out[key]}`);
+		}
+
+		return out;
+	};
+
+	const environment = readEnvironmentVariables();
+
+	const credentials = {
+		credentials: {
+			accessKeyId: environment.accessKeyId,
+			secretAccessKey: environment.secretAccessKey
+		}
 	};
 
 	const dbio = require('mongodb-io-native');
 	const S3 = require('aws-sdk/clients/s3');
-	const s3 = new S3(getAWSCreds());
+	const s3 = new S3(credentials);
 	const fs = require('fs');
 
 	const backup = async host => {
@@ -52,7 +73,7 @@
 	};
 
 	const filename = await backup('localhost');
-	return await upload(filename, 'xxxxxxx');
+	return await upload(filename, environment.bucketName);
 })().then(
 	results => {
 		console.log(`Backup finished with ${JSON.stringify(results)}`);
