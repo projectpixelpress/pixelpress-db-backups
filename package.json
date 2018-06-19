@@ -9,7 +9,7 @@
     "lint": "eslint \"**/*.js\""
   },
   "dependencies": {
-    "mongodb-io": "^0.2.5"
+    "mongodb-io-native": "^0.1.2"
   },
   "devDependencies": {
     "eslint": "^4.19.1",

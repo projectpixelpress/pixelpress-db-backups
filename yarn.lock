@@ -527,9 +527,9 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "0.0.8"
 
-mongodb-io@^0.2.5:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/mongodb-io/-/mongodb-io-0.2.5.tgz#d1664a1537279a4eb4b3c5cfc75bfc3d15daad54"
+mongodb-io-native@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/mongodb-io-native/-/mongodb-io-native-0.1.2.tgz#b733af8f5c5f5464651b42917a477f8749cb3b9c"
 
 ms@2.0.0:
   version "2.0.0"

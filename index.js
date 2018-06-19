@@ -1,19 +1,19 @@
 (async () => {
-	const dbio = require('mongodb-io');
+	const dbio = require('mongodb-io-native');
 
 	const backup = async ip => {
-		const options = {
+		const config = {
 			host: ip,
 			port: 27017,
 			// user,
 			// password,
 			// export filename
-			out: 'dump'
+			out: 'newfile'
 			// drop: false, // Before restoring the collections from the dumped backup, drops the collections from the target database.
 			// filePath: '' // path to read `tar.gz` file for mongorestore.
 		};
-		console.log(`Dumping ${JSON.stringify(options)}`);
-		const filename = await dbio.export(options);
+		console.log(`Dumping ${JSON.stringify(config)}`);
+		const filename = await dbio.export({config});
 		return filename;
 	};
 
