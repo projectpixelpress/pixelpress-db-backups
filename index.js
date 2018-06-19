@@ -5,11 +5,11 @@
 			['bucketName', 'AWS_S3_BACKUP_BUCKET'],
 			['accessKeyId', 'AWS_AKID'],
 			['secretAccessKey', 'AWS_SECRET']
+			// TODO add host
+			// TODO add folder name for backups
 		]);
 
 		const out = {};
-
-		console.log('map is', map);
 
 		for (const [key, value] of map) {
 			console.log(`Reading ${value} from environment`);
@@ -48,7 +48,15 @@
 		});
 	};
 
-	const upload = (filePath, bucket) => {
+	const buildKey = (filePath, folderName) => {
+		let key = filePath.replace('/tmp/', '');
+		if (folderName) {
+			key = folderName + '/' + key;
+		}
+		return key;
+	};
+
+	const upload = (filePath, awsKey, bucket) => {
 		return new Promise(function(resolve, reject) {
 			fs.readFile(filePath, (err, data) => {
 				if (err) {
@@ -57,7 +65,7 @@
 
 				const params = {
 					Bucket: bucket,
-					Key: filePath.replace('/tmp/', ''),
+					Key: awsKey,
 					Body: data
 				};
 
@@ -73,8 +81,9 @@
 		});
 	};
 
-	const filename = await backup('localhost');
-	return await upload(filename, environment.bucketName);
+	const filePath = await backup('localhost');
+	const key = buildKey(filePath, 'testfolder');
+	return await upload(filePath, key, environment.bucketName);
 })().then(
 	results => {
 		console.log(`Backup finished with ${JSON.stringify(results)}`);
