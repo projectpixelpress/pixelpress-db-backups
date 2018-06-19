@@ -4,9 +4,9 @@
 		const map = new Map([
 			['bucketName', 'AWS_S3_BACKUP_BUCKET'],
 			['accessKeyId', 'AWS_AKID'],
-			['secretAccessKey', 'AWS_SECRET']
-			// TODO add host
-			// TODO add folder name for backups
+			['secretAccessKey', 'AWS_SECRET'],
+			['host', 'DB_HOST'],
+			['subfolder', 'AWS_BUCKET_SUBFOLDER']
 		]);
 
 		const out = {};
@@ -81,8 +81,8 @@
 		});
 	};
 
-	const filePath = await backup('localhost');
-	const key = buildKey(filePath, 'testfolder');
+	const filePath = await backup(environment.host || 'localhost');
+	const key = buildKey(filePath, environment.subfolder);
 	return await upload(filePath, key, environment.bucketName);
 })().then(
 	results => {
