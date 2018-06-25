@@ -1,4 +1,4 @@
-const dbio = require('mongodb-io-native');
+const dbio = require('./mongodump');
 const S3 = require('aws-sdk/clients/s3');
 const fs = require('fs');
 const moment = require('moment');
