@@ -2,15 +2,16 @@
 	"name": "pixelpress-db-backup",
 	"version": "0.0.1",
 	"description": "Node-based MongoDB backups",
-	"main": "index.js",
+	"main": "server.js",
 	"author": "Evan <evan@projectpixelpress.com>",
 	"license": "MIT",
 	"scripts": {
-		"start": "node cron-wrapped.js",
+		"start": "node src/server.js",
 		"lint": "eslint \"**/*.js\""
 	},
 	"dependencies": {
 		"aws-sdk": "^2.259.1",
+		"express": "^4.16.3",
 		"moment": "^2.22.2",
 		"mongodb-io-native": "^0.1.2",
 		"node-cron": "^1.2.1"
