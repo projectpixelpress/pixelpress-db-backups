@@ -9,6 +9,9 @@ app.post('/backup', async (request, response) => {
 	const result = await backup.run();
 	response.json(result);
 });
+app.get('/backup', async (request, response) => {
+	response.json(backup.lastRun);
+});
 
 console.log('Turning on cron');
 require('./cron')();

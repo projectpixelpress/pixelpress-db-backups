@@ -4,6 +4,13 @@ const fs = require('fs');
 const moment = require('moment');
 const readEnvironmentVariables = require('./readEnvironmentVariables');
 
+let lastRun = {
+	datetime: -1,
+	status: 'never started',
+	lastError: undefined,
+	lastFile: undefined
+};
+
 const backup = async host => {
 	const exportFileName = `backup-${host}-${moment().format()}`;
 	const config = {
@@ -52,23 +59,36 @@ const upload = (filePath, awsKey, bucket, credentials) => {
 };
 
 const run = async () => {
-	console.log(`Backup starting with ${JSON.stringify(results)}`);
-	const environment = readEnvironmentVariables();
+	lastRun.datetime = moment().format();
+	lastRun.status = 'starting';
+	try {
+		console.log(`Backup starting`);
+		const environment = readEnvironmentVariables();
 
-	const credentials = {
-		credentials: {
-			accessKeyId: environment.accessKeyId,
-			secretAccessKey: environment.secretAccessKey
-		}
-	};
+		const credentials = {
+			credentials: {
+				accessKeyId: environment.accessKeyId,
+				secretAccessKey: environment.secretAccessKey
+			}
+		};
 
-	const filePath = await backup(environment.host || 'localhost');
-	const key = buildKey(filePath, environment.subfolder);
-	const response = await upload(filePath, key, environment.bucketName, credentials);
-	console.log(`Backup finished with ${response}`);
-	return response;
+		const filePath = await backup(environment.host || 'localhost');
+		const key = buildKey(filePath, environment.subfolder);
+		const response = await upload(filePath, key, environment.bucketName, credentials);
+		console.log(`Backup finished with ${JSON.stringify(response)}`);
+		lastRun.status = 'success';
+		lastRun.datetime = moment().format();
+		lastRun.lastFile = response;
+		return response;
+	} catch(error) {
+		console.log(error);
+		lastRun.status = 'error';
+		lastRun.lastError = JSON.stringify(error);
+		lastRun.dateTime = moment().format();
+	}
 };
 
 module.exports = {
+	lastRun: lastRun,
 	run: run
 };
