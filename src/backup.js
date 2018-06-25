@@ -6,7 +6,7 @@ const readEnvironmentVariables = require('./readEnvironmentVariables');
 
 let lastRun = {
 	datetime: -1,
-	status: 'never started',
+	status: 204,
 	lastError: undefined,
 	lastFile: undefined
 };
@@ -76,13 +76,13 @@ const run = async () => {
 		const key = buildKey(filePath, environment.subfolder);
 		const response = await upload(filePath, key, environment.bucketName, credentials);
 		console.log(`Backup finished with ${JSON.stringify(response)}`);
-		lastRun.status = 'success';
+		lastRun.status = 200;
 		lastRun.datetime = moment().format();
 		lastRun.lastFile = response;
 		return response;
 	} catch(error) {
 		console.log(error);
-		lastRun.status = 'error';
+		lastRun.status = 500;
 		lastRun.lastError = JSON.stringify(error);
 		lastRun.dateTime = moment().format();
 	}

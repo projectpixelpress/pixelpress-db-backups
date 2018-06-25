@@ -7,10 +7,10 @@ const backup = require('./backup');
 console.log('Setting up routes');
 app.post('/backup', async (request, response) => {
 	const result = await backup.run();
-	response.json(result);
+	response.status(backup.lastRun.status).json(result);
 });
-app.get('/backup', async (request, response) => {
-	response.json(backup.lastRun);
+app.get('/backup', (request, response) => {
+	response.status(backup.lastRun.status).json(backup.lastRun);
 });
 
 console.log('Turning on cron');
