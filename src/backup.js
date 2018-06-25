@@ -52,6 +52,7 @@ const upload = (filePath, awsKey, bucket, credentials) => {
 };
 
 const run = async () => {
+	console.log(`Backup starting with ${JSON.stringify(results)}`);
 	const environment = readEnvironmentVariables();
 
 	const credentials = {
@@ -63,7 +64,9 @@ const run = async () => {
 
 	const filePath = await backup(environment.host || 'localhost');
 	const key = buildKey(filePath, environment.subfolder);
-	return await upload(filePath, key, environment.bucketName, credentials);
+	const response = await upload(filePath, key, environment.bucketName, credentials);
+	console.log(`Backup finished with ${response}`);
+	return response;
 };
 
 module.exports = {

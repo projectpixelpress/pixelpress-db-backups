@@ -4,15 +4,15 @@ module.exports = () => {
 		['accessKeyId', 'AWS_AKID'],
 		['secretAccessKey', 'AWS_SECRET'],
 		['host', 'DB_HOST'],
-		['subfolder', 'AWS_BUCKET_SUBFOLDER']
+		['subfolder', 'AWS_BUCKET_SUBFOLDER'],
+		['cronSchedule', 'CRON_SCHEDULE']
 	]);
 
 	const out = {};
 
 	for (const [key, value] of map) {
-		console.log(`Reading ${value} from environment`);
 		out[key] = process.env[value];
-		console.log(`  found ${out[key]}`);
+		console.log(`Environment ${value} was ${out[key]}`);
 	}
 
 	return out;
