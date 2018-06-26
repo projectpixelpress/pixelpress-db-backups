@@ -1,3 +1,5 @@
+// Adapted from https://github.com/majexa/mongodb-io-native
+
 const {exec, execSync} = require('child_process');
 
 const setConfig = (config = {}) => {
@@ -6,6 +8,7 @@ const setConfig = (config = {}) => {
 		port: 27017,
 		user: '',
 		password: '',
+		command: 'mongodump',
 		out: 'dump'
 	};
 	for (const key in defaultConfig) {
@@ -16,8 +19,8 @@ const setConfig = (config = {}) => {
 
 const getCommand = config => {
 	const getCmd = ({dbName, collectionName, query} = {}) => {
-		const {host, port, user, password, out} = config;
-		let cmd = `mongodump -h ${host} --port ${port} -o /tmp/${out}`;
+		const {host, port, user, password, command, out} = config;
+		let cmd = `${command} -h ${host} --port ${port} -o /tmp/${out}`;
 		if (user) cmd += ` -u ${user}`;
 		if (password) cmd += ` -p ${password}`;
 		if (dbName) cmd += ` -d ${dbName}`;

@@ -11,11 +11,12 @@ let lastRun = {
 	lastFile: undefined
 };
 
-const backup = async host => {
+const backup = async (host, command) => {
 	const exportFileName = `backup-${host}-${moment().format()}`;
 	const config = {
 		host: host,
 		port: 27017,
+		command: command,
 		out: exportFileName
 	};
 	console.log(`Dumping with ${JSON.stringify(config)}`);
@@ -72,7 +73,7 @@ const run = async () => {
 			}
 		};
 
-		const filePath = await backup(environment.host || 'localhost');
+		const filePath = await backup(environment.host || 'localhost', environment.mongodump || 'mongodump');
 		const key = buildKey(filePath, environment.subfolder);
 		const response = await upload(filePath, key, environment.bucketName, credentials);
 		console.log(`Backup finished with ${JSON.stringify(response)}`);

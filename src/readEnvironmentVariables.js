@@ -5,6 +5,7 @@ module.exports = () => {
 		['secretAccessKey', 'AWS_SECRET'],
 		['host', 'DB_HOST'],
 		['subfolder', 'AWS_BUCKET_SUBFOLDER'],
+		['mongodump', 'MONGODUMP_LOCATION'],
 		['cronSchedule', 'CRON_SCHEDULE']
 	]);
 
