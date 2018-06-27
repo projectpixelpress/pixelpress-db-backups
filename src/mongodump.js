@@ -1,6 +1,6 @@
 // Adapted from https://github.com/majexa/mongodb-io-native
 
-const {exec, execSync} = require('child_process');
+const {exec} = require('child_process');
 
 const setConfig = (config = {}) => {
 	const defaultConfig = {
@@ -31,22 +31,27 @@ const getCommand = config => {
 	return getCmd();
 };
 
+const wrapInPromise = function() {
+	return new Promise((resolve, reject) => {
+		console.log(...arguments);
+		exec(...arguments, (error) => {
+			if (error) {
+				return reject(error);
+			}
+			return resolve();
+		});
+	});
+};
+
 module.exports = {
-	export({config, dbs} = {}) {
+	async export({config, dbs} = {}) {
 		config = setConfig(config);
 		const command = getCommand(config, dbs);
-		execSync(`rm -rf '${config.out}'`, {cwd: '/tmp'});
-		return new Promise((resolve, reject) => {
-			execSync(command);
-			exec(`tar zcvf '${config.out}.tar.gz' '${config.out}'`, {cwd: '/tmp'}, (err, out, stderr) => {
-				process.stderr.write(out + stderr + '\n');
-				if (err) reject(err);
-				exec(`rm -rf '${config.out}'`, {cwd: '/tmp'}, (err, out, stderr) => {
-					process.stderr.write(out + stderr + '\n');
-					if (err) reject(err);
-					resolve(`/tmp/${config.out}.tar.gz`);
-				});
-			});
-		});
+		await wrapInPromise(`rm -rf '${config.out}'`, {cwd: '/tmp'});
+		await wrapInPromise(command);
+		await wrapInPromise(`tar zcvf '${config.out}.tar.gz' '${config.out}'`, {cwd: '/tmp'});
+		await wrapInPromise(`rm -rf '${config.out}'`, {cwd: '/tmp'});
+
+		return `/tmp/${config.out}.tar.gz`;
 	}
 };
