@@ -20,7 +20,7 @@ const setConfig = (config = {}) => {
 const getCommand = config => {
 	const getCmd = ({dbName, collectionName, query} = {}) => {
 		const {host, port, user, password, command, out} = config;
-		let cmd = `${command} -h ${host} --port ${port} -o /tmp/${out}`;
+		let cmd = `${command} -h ${host} --port ${port} -o /tmp/${out} --quiet`;
 		if (user) cmd += ` -u ${user}`;
 		if (password) cmd += ` -p ${password}`;
 		if (dbName) cmd += ` -d ${dbName}`;
