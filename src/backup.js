@@ -11,12 +11,12 @@ let lastRun = {
 	lastFile: undefined
 };
 
-const backup = async (host, command) => {
-	const exportFileName = `backup-${host}-${moment().format()}`;
+const backup = async (host, pathToMongodump) => {
+	const exportFileName = `backup-${host}_${moment().format()}`;
 	const config = {
 		host: host,
 		port: 27017,
-		command: command,
+		pathToMongodump: pathToMongodump,
 		out: exportFileName
 	};
 	console.log(`Dumping with ${JSON.stringify(config)}`);
@@ -61,7 +61,7 @@ const upload = (filePath, awsKey, bucket, credentials) => {
 
 const run = async () => {
 	lastRun.datetime = moment().format();
-	lastRun.status = 'starting';
+	lastRun.status = 202;
 	try {
 		console.log(`Backup starting`);
 		const environment = readEnvironmentVariables();

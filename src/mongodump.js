@@ -8,7 +8,7 @@ const setConfig = (config = {}) => {
 		port: 27017,
 		user: '',
 		password: '',
-		command: 'mongodump',
+		pathToMongodump: 'mongodump',
 		out: 'dump'
 	};
 	for (const key in defaultConfig) {
@@ -17,10 +17,10 @@ const setConfig = (config = {}) => {
 	return config;
 };
 
-const getCommand = config => {
+const getBackupCommand = config => {
 	const getCmd = ({dbName, collectionName, query} = {}) => {
-		const {host, port, user, password, command, out} = config;
-		let cmd = `${command} -h ${host} --port ${port} -o /tmp/${out} --quiet`;
+		const {host, port, user, password, pathToMongodump, out} = config;
+		let cmd = `${pathToMongodump} --host ${host}:${port} -o /tmp/${out} --quiet`;
 		if (user) cmd += ` -u ${user}`;
 		if (password) cmd += ` -p ${password}`;
 		if (dbName) cmd += ` -d ${dbName}`;
@@ -46,9 +46,9 @@ const wrapInPromise = function() {
 module.exports = {
 	async export({config, dbs} = {}) {
 		config = setConfig(config);
-		const command = getCommand(config, dbs);
+		const backupCommand = getBackupCommand(config, dbs);
 		await wrapInPromise(`rm -rf '${config.out}'`, {cwd: '/tmp'});
-		await wrapInPromise(command);
+		await wrapInPromise(backupCommand);
 		await wrapInPromise(`tar zcvf '${config.out}.tar.gz' '${config.out}'`, {cwd: '/tmp'});
 		await wrapInPromise(`rm -rf '${config.out}'`, {cwd: '/tmp'});
 
