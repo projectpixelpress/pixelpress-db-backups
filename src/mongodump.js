@@ -16,17 +16,11 @@ const setConfig = (config = {}) => {
 };
 
 const getBackupCommand = config => {
-	const getCmd = ({dbName, collectionName, query} = {}) => {
-		const {host, port, user, password, pathToMongodump, out} = config;
-		let cmd = `${pathToMongodump} --host ${host}:${port} -o /tmp/${out} --quiet`;
-		if (user) cmd += ` -u ${user}`;
-		if (password) cmd += ` -p ${password}`;
-		if (dbName) cmd += ` -d ${dbName}`;
-		if (collectionName) cmd += ` -c ${collectionName}`;
-		if (query) cmd += ` -q '${query}'`;
-		return cmd;
-	};
-	return getCmd();
+	const {host, port, user, password, pathToMongodump, out} = config;
+	let cmd = `${pathToMongodump} --host ${host}:${port} -o /tmp/${out} --quiet`;
+	if (user) cmd += ` -u ${user}`;
+	if (password) cmd += ` -p ${password}`;
+	return cmd;
 };
 
 module.exports = {
