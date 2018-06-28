@@ -3,7 +3,7 @@ PixelPress Database Backup
 
 Backs up one MonogoDB server, once daily at midnight server-time.
 
-Designed to be deployed via Docker, specifically for AWS ElasticBeanstalk.
+Designed to be deployed on AWS ElasticBeanstalk.
 
 ## Environment Variables
 
