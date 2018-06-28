@@ -1,7 +1,5 @@
 // Adapted from https://github.com/majexa/mongodb-io-native
 
-const {exec} = require('child_process');
-
 const setConfig = (config = {}) => {
 	const defaultConfig = {
 		host: '127.0.0.1',
@@ -31,27 +29,9 @@ const getBackupCommand = config => {
 	return getCmd();
 };
 
-const wrapInPromise = function() {
-	return new Promise((resolve, reject) => {
-		console.log(...arguments);
-		exec(...arguments, (error) => {
-			if (error) {
-				return reject(error);
-			}
-			return resolve();
-		});
-	});
-};
-
 module.exports = {
-	async export({config, dbs} = {}) {
+	getExportCommand({config, dbs} = {}) {
 		config = setConfig(config);
-		const backupCommand = getBackupCommand(config, dbs);
-		await wrapInPromise(`rm -rf '${config.out}'`, {cwd: '/tmp'});
-		await wrapInPromise(backupCommand);
-		await wrapInPromise(`tar zcvf '${config.out}.tar.gz' '${config.out}'`, {cwd: '/tmp'});
-		await wrapInPromise(`rm -rf '${config.out}'`, {cwd: '/tmp'});
-
-		return `/tmp/${config.out}.tar.gz`;
+		return getBackupCommand(config, dbs);
 	}
 };

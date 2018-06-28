@@ -1,8 +1,10 @@
-const dbio = require('./mongodump');
 const S3 = require('aws-sdk/clients/s3');
 const fs = require('fs');
 const moment = require('moment');
+
+const mongodump = require('./mongodump');
 const readEnvironmentVariables = require('./readEnvironmentVariables');
+const {cmd, args} = require('./commandRunner');
 
 let lastRun = {
 	datetime: -1,
@@ -20,13 +22,17 @@ const backup = async (host, pathToMongodump) => {
 		out: exportFileName
 	};
 	console.log(`Dumping with ${JSON.stringify(config)}`);
-	return await dbio.export({
-		config
-	});
+	const backupCommand = mongodump.getExportCommand({config});
+	await cmd(`rm -rf '${config.out}'`, args);
+	await cmd(backupCommand, args);
+	await cmd(`tar zcvf '${config.out}.tar.gz' '${config.out}'`, args);
+	await cmd(`rm -rf '${config.out}'`, args);
+
+	return `${args.cwd}/${config.out}.tar.gz`;
 };
 
 const buildKey = (filePath, folderName) => {
-	let key = filePath.replace('/tmp/', '');
+	let key = filePath.replace(`${args.cwd}/`, '');
 	if (folderName) {
 		key = folderName + '/' + key;
 	}
@@ -76,6 +82,7 @@ const run = async () => {
 		const filePath = await backup(environment.host || 'localhost', environment.mongodump || 'mongodump');
 		const key = buildKey(filePath, environment.subfolder);
 		const response = await upload(filePath, key, environment.bucketName, credentials);
+		await cmd(`rm -rf '${filePath}'`, args);
 		console.log(`Backup finished with ${JSON.stringify(response)}`);
 		lastRun.status = 200;
 		lastRun.datetime = moment().format();
