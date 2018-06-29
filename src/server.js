@@ -6,10 +6,12 @@ const backup = require('./backup');
 
 console.log('Setting up routes');
 app.post('/backup', async (request, response) => {
+	console.log('GET /backup');
 	backup.run();
 	response.status(backup.lastRun.status).json();
 });
 app.get('/backup', (request, response) => {
+	console.log('POST /backup');
 	response.status(backup.lastRun.status).json(backup.lastRun);
 });
 

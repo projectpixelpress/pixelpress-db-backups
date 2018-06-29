@@ -14,7 +14,7 @@ let lastRun = {
 };
 
 const backup = async (host, pathToMongodump) => {
-	const exportFileName = `backup-${host}_${moment().format()}`;
+	const exportFileName = `backup-${host}_${moment().format('YY-MM-DDTHHmmss')}`;
 	const config = {
 		host: host,
 		port: 27017,
