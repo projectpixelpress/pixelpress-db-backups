@@ -23,7 +23,7 @@ const backup = async (host, pathToMongodump) => {
 	};
 	console.log(`Dumping with ${JSON.stringify(config)}`);
 	const backupCommand = mongodump.getExportCommand({config});
-	await cmd(`rm -rf '${config.out}'`, args);
+	await cmd(`rm -rf 'backup-${host}_*'`, args);
 	await cmd(backupCommand, args);
 	await cmd(`tar zcvf '${config.out}.tar.gz' '${config.out}'`, args);
 	await cmd(`rm -rf '${config.out}'`, args);
